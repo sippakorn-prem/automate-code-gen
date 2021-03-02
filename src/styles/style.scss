@@ -1,0 +1,12 @@
+@import '~material-design-icons-iconfont/src/material-design-icons';
+
+body {
+  margin: 0;
+  font-size: 100%;
+  width: 350px;
+  max-height: 500px;
+}
+
+.v-icon {
+  @include material-icon('face');
+}

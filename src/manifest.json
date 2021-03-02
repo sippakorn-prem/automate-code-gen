@@ -1,0 +1,24 @@
+{
+  "name": "Code Gen",
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "description": "Automate code generator",
+  "permissions": [
+    "storage",
+    "webNavigation",
+    "activeTab",
+    "contextMenus",
+    "*://*/"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "browser_action": {
+    "default_title": "Code A Gen",
+    "default_popup": "index.html"
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  }
+}
