@@ -6,7 +6,8 @@
   "keywords": [],
   "main": "index.js",
   "scripts": {
-    "build": "set NODE_ENV=production & webpack"
+    "build": "set NODE_ENV=production & webpack",
+    "dist": "npm run build & node scripts/zip.js"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
@@ -38,6 +39,7 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.24.2",
     "webpack-cli": "^4.5.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^3.11.2",
+    "zip-folder": "^1.0.0"
   }
 }

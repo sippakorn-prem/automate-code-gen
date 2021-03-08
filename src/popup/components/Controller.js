@@ -41,7 +41,7 @@ function Controller (props){
         onClick={toggleRecord}>
         {isRecording ? 'Stop' : 'Record'}
       </Button>
-      {liveEvents?.length &&
+      {liveEvents.length &&
         <Button className={classes.btn} color="primary" onClick={toggleReset}>Reset</Button>
       }
     </Box>
