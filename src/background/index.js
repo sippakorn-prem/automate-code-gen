@@ -1,7 +1,7 @@
 class RecordingController {
   constructor (){
     this._initialized = false
-    this._recording = []
+    this._recording = {}
     this._isPaused = false
   }
 
@@ -37,14 +37,15 @@ class RecordingController {
   }
 
   cleanUp = callback => {
-    this._recording = []
+    this._recording = {}
     chrome.storage.local.remove('recordingEvents', () => {
       callback?.()
     })
   }
 
   handleMessage = (msg, sender) => {
-    this._recording.push(msg)
+    if (this._recording[msg.action]) this._recording[msg.action].push(msg)
+    else this._recording[msg.action] = [msg]
     chrome.storage.local.set({ recordingEvents: this._recording })
   }
 

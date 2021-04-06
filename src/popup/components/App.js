@@ -1,17 +1,21 @@
 import React, { Component } from 'react'
 import './App.css'
 import Controller from './Controller'
+import SelectEvent  from './SelectEvent'
 import EventList from './EventList'
-
-
 export default class App extends Component { 
   constructor (props){
     super(props)
     this.state = {
       extensionBus: null,
       isRecording: false,
-      liveEvents: []
+      liveEvents: {},
+      currentEvent: ''
     }
+  }
+
+  onChangeEvent = event => {
+    this.setState({ currentEvent: event.target.value })
   }
 
   toggleRecord = async () =>{
@@ -31,7 +35,6 @@ export default class App extends Component {
   }
 
   stopRecording = () =>{
-    console.log('Stoppppppp')
     this.state.extensionBus.postMessage({ action: 'stop' })
     chrome.storage.local.get(['recordingEvents'], async ({ recordingEvents }) => {
       await this.setState({ liveEvents: recordingEvents })
@@ -70,6 +73,7 @@ export default class App extends Component {
       if(this.state.isRecording){
         chrome.storage.local.get(['recordingEvents'], async ({ recordingEvents }) => {
           await this.setState({ liveEvents: recordingEvents })
+          await this.setState({ currentEvent: Object.keys(recordingEvents)[0] || '' })
         })
       }
     })
@@ -77,13 +81,14 @@ export default class App extends Component {
   }
 
   render (){
-    const { toggleRecord, toggleReset } = this
-    const { isRecording, liveEvents } = this.state
-
+    const { toggleRecord, toggleReset, onChangeEvent } = this
+    const { isRecording, liveEvents, currentEvent } = this.state
+    
     return (
       <div className="root">
         <Controller {... { isRecording, liveEvents, toggleRecord, toggleReset }} />
-        <EventList {... { liveEvents }}/>
+        {Boolean(Object.keys(liveEvents).length) && <SelectEvent { ... { liveEvents, currentEvent, onChangeEvent } }/>}
+        <EventList {... { liveEvents, currentEvent }}/>
       </div>
     )
   }

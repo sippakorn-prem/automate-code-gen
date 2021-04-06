@@ -4,7 +4,7 @@ const path = require('path')
 const zipFolder = require('zip-folder')
 
 const DEST_DIR = path.join(__dirname, '../dist')
-const DEST_ZIP_DIR = path.join(__dirname, '../dist-zip')
+const DEST_ZIP_DIR = path.join(__dirname, '../')
 
 const extractExtensionData = () => {
   const extPackageJson = require('../package.json')
@@ -37,7 +37,8 @@ const buildZip = (src, dist, zipFilename) => {
 
 const main = () => {
   const {name, version} = extractExtensionData()
-  const zipFilename = `${name}-v${version}.zip`
+  // const zipFilename = `${name}-v${version}.zip`
+  const zipFilename = 'code-gen.zip'
 
   makeDestZipDirIfNotExists()
 

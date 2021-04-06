@@ -43,10 +43,10 @@ export default class EventRecorder {
 
     const msgObj = {
       action: e.type,
-      selector: e.target.getAttribute('class'),
+      selector: e.target?.getAttribute('class'),
       wrapper,
       wrapperSelector,
-      dataQa: e.target.getAttribute('data-qa') || null,
+      dataQa: e.target?.getAttribute('data-qa') || null,
       data: {
         event: e,
         target: e.target
