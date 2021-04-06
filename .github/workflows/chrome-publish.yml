@@ -21,14 +21,38 @@ jobs:
           path: '.'
           key: ${{ github.sha }}
 
-  build:
+  # build:
+  #   runs-on: ubuntu-latest
+  #   needs: dependencies
+  #   steps:
+  #     - uses: actions/cache@v1
+  #       id: restore-dependencies
+  #       with:
+  #         path: '.'
+  #         key: ${{ github.sha }}
+  #     - name: Build & Zip
+  #       run: npm run dist
+  
+  publish:
     runs-on: ubuntu-latest
-    needs: dependencies
+    # needs: build
     steps:
-      - uses: actions/cache@v1
-        id: restore-dependencies
-        with:
-          path: '.'
-          key: ${{ github.sha }}
-      - name: Build & Zip
-        run: npm run dist
+      - name: Chrome Extension upload & publish
+      command: |
+        ACCESS_TOKEN=$(curl "https://accounts.google.com/o/oauth2/token" -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r .access_token)
+        echo ${ACCESS_TOKEN}
+      # curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -X PUT -T dist-zip\code-gen.zip -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${APP_ID}"
+      # curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish"
+
+      # - name: Chrome Extension upload & publish
+      # uses: Passiverecords/chrome-extension-upload-action@latest
+      # with:
+      #   # Auth refresh token
+      #   refresh-token: 
+      #   app-id: ${{ secrets.APP_ID }}
+      #   client-id: ${{ secrets.CLIENT_ID }}
+      #   # Token client secret
+      #   client-secret: 
+      #   file-name: './scripts/zip.js'
+      #   publish: true
+        
