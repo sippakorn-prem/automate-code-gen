@@ -22,37 +22,27 @@ export default class EventRecorder {
   }
 
   addAllListeners = events => {
-    events.forEach(type => {
-      window.addEventListener(type, this.recordEvent, true)
-    })
+    events.forEach(type => window.addEventListener(type, this.recordEvent, true))
   }
 
   removeAllListeners = events => {
-    events.forEach(type => {
-      window.removeEventListener(type, this.recordEvent, true)
-    })
+    events.forEach(type => window.removeEventListener(type, this.recordEvent, true))
   }
 
   sendMessage = msg => {
-    if (chrome.runtime && chrome.runtime.onMessage) chrome.runtime.sendMessage(msg)
+    chrome.runtime.sendMessage(msg)
   }
 
   recordEvent = e => {
     const wrapper = this.getTargetWrapper(e.target).reverse()
     const wrapperSelector = wrapper.map(s => `[data-qa="${s}"]`).join(' ')
-
     const msgObj = {
       action: e.type,
       selector: e.target?.getAttribute('class'),
       wrapper,
       wrapperSelector,
-      dataQa: e.target?.getAttribute('data-qa') || null,
-      data: {
-        event: e,
-        target: e.target
-      }
+      dataQa: e.target?.getAttribute('data-qa') || null
     }
-    console.log(msgObj)
     this.sendMessage(msgObj)
   }
 

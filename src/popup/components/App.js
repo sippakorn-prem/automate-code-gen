@@ -82,7 +82,7 @@ export default class App extends Component {
 
   render (){
     const { toggleRecord, toggleReset, onChangeEvent } = this
-    const { isRecording, liveEvents, currentEvent } = this.state
+    const { isRecording, liveEvents = {}, currentEvent } = this.state
     
     return (
       <div className="root">

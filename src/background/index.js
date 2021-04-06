@@ -21,7 +21,6 @@ class RecordingController {
   }
 
   pause = () =>{
-    console.debug('pause')
     this._isPaused = true
   }
   
