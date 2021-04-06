@@ -41,6 +41,6 @@ jobs:
         uses: Klemensas/chrome-extension-upload-action@v1.3
         with:
           client-id: ${{ secrets.CLIENT_ID }}'
-          file-name: './code-gen.zip'
+          file-name: code-gen.zip
           app-id: ${{ secrets.APP_ID }}'
           publish: true
