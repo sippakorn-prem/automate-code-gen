@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Controller (props){
   const classes = useStyles()
-  const { isRecording, liveEvents = [], toggleRecord, toggleReset } = props
+  const { isRecording, liveEvents = {}, toggleRecord, toggleReset } = props
 
   return (
     <Box className={classes.root} boxShadow={3}>
@@ -41,7 +41,7 @@ function Controller (props){
         onClick={toggleRecord}>
         {isRecording ? 'Stop' : 'Record'}
       </Button>
-      {liveEvents.length &&
+      {Boolean(Object.keys(liveEvents).length) &&
         <Button className={classes.btn} color="primary" onClick={toggleReset}>Reset</Button>
       }
     </Box>

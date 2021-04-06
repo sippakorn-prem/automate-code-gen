@@ -11,22 +11,19 @@ const useStyles = makeStyles((theme) => ({
   },
   topControl: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'flex-end'
   },
   divider: {
     margin: theme.spacing(2, 0)
   },
   prismCode: {
     position: 'relative'
-  },
-  btnCopy: {
-    
   }
 }))
 
 function EventItem (props){
   const classes = useStyles()
-  const { data } = props
+  const { data = [], liveEvents, currentEvent } = props
   const [code, setCode] = useState('')
 
   String.prototype.capitalize = function() {
@@ -34,31 +31,26 @@ function EventItem (props){
   }
 
   function getCode (){
-    if(data.action === 'click') return codeClick()
+    if(currentEvent === 'click') return codeClick()
     return ''
   }
 
   function codeClick (){
-    console.log({ codeClick: data })
-    const { selector, dataQa, wrapper, wrapperSelector } = data
-    const target = dataQa || wrapper[0] ? `[data-qa="${dataQa || wrapper[0]}"]` : selector
-    return `$.suiteClick({ name: 'ACTION_NAME', btn: '${target}', visible: '${wrapperSelector}' })`
+    return data.reduce((code, event) => {
+      const { selector, dataQa, wrapper, wrapperSelector } = event
+      const target = dataQa || wrapper[0] ? `[data-qa="${dataQa || wrapper[0]}"]` : selector
+      return code + `$.suiteClick({ name: 'ACTION_NAME', btn: '${target}', visible: '${wrapperSelector}' })\n`
+    }, '')
   }
 
   useEffect(()=>{
-    console.log(data)
     setCode(getCode())
-  }, [])
+  }, [liveEvents, currentEvent])
 
   return (
     <>
       <div className={classes.root}>
         <div className={classes.topControl}>
-          <Chip
-            label={data.action.capitalize()}
-            color="primary"
-            variant="outlined"
-          />
           {code &&
             <CopyToClipboard className={classes.btnCopy} text={getCode()}>
               <IconButton size="small"><FileCopy fontSize="small"/></IconButton>
@@ -70,7 +62,6 @@ function EventItem (props){
             <Prism language="javascript">{code}</Prism>
           </div>
         }
-        <Divider className={classes.divider}/>
       </div>
     </>
   )
