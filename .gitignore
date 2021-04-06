@@ -12,6 +12,7 @@
 /build
 /dist
 /dist-zip
+code-gen.zip
 
 # misc
 .DS_Store
