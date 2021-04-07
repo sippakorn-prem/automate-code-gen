@@ -1,17 +1,54 @@
-version: 2.1
-
 workflows:
-  set-env-vars:
+  version: 2
+  main:
     jobs:
       - build:
+          filters:
+            tags:
+              only: /.*/
+      - publish:
           context: Code Gen
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
+version: 2
 jobs:
   build:
     docker:
-      - image: ubuntu:16.04
+      - image: cibuilds/chrome-extension:latest
     steps:
-        - checkout
-        - run: 
-            name: "echo an env var that is part of our context"
-            command: |
-              echo $APP_ID
+      - checkout
+      - run:
+          name: "Install Dependencies"
+          command: echo "You can also install Yarn, NPM, or anything else you need to use to build and test your extension."
+      - run:
+          name: "Make Extension Production Ready"
+          command: |
+            jq '.version = "new-version"' manifest.json | sponge manifest.json
+            jq '.browser_action.default_icon = "icon.png"' manifest.json | sponge manifest.json
+      - run:
+          name: "Run Tests"
+          command: echo "Run any tests here."
+      - run:
+          name: "Package Extension"
+          command: git archive -o code-gen.zip HEAD
+      - persist_to_workspace:
+          root: /root/project
+          paths:
+            - code-gen.zip
+
+  publish:
+    docker:
+      - image: cibuilds/chrome-extension:latest
+    environment:
+      - APP_ID: $APP_ID
+    steps:
+      - attach_workspace:
+          at: /root/workspace
+      - run:
+          name: "Publish to the Google Chrome Store"
+          command: publish /root/workspace/code-gen.zip
