@@ -1,0 +1,19 @@
+version: 2.1
+
+workflows:
+  test-env-vars:
+    jobs:
+      - build:
+          context: Code Gen
+jobs:
+  build:
+    docker:
+      - image: ubuntu:16.04
+    environment:
+      - APP_ID: $APP_ID
+    steps:
+        - checkout
+        - run: 
+            name: "echo an env var that is part of our context"
+            command: |
+              echo $APP_ID
