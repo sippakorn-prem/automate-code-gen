@@ -34,6 +34,8 @@ jobs:
     environment:
       - APP_ID: $APP_ID
     steps:
+      - attach_workspace:
+          at: /root/workspace
       - run:
           name: "Publish to the Google Chrome Store"
-          command: publish ~/code-gen.zip
+          command: publish /root/workspace/code-gen.zip
