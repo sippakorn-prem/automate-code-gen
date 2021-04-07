@@ -2,19 +2,11 @@ workflows:
   version: 2
   main:
     jobs:
-      - build:
-          filters:
-            tags:
-              only: /.*/
+      - build
       - publish:
           context: Code Gen
           requires:
             - build
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /.*/
 version: 2
 jobs:
   build:
@@ -25,17 +17,19 @@ jobs:
       - run:
           name: "Install Dependencies"
           command: echo "You can also install Yarn, NPM, or anything else you need to use to build and test your extension."
-      # - run:
-      #     name: "Make Extension Production Ready"
-      #     command: |
-      #       jq '.version = "new-version"' manifest.json | sponge manifest.json
-      #       jq '.browser_action.default_icon = "icon.png"' manifest.json | sponge manifest.json
       - run:
           name: "Run Tests"
           command: echo "Run any tests here."
       - run:
           name: "Package Extension"
           command: git archive -o code-gen.zip HEAD
+      - run:
+          name: "Check files"
+          command:
+            for entry in /root/workspace/*
+              do
+                echo "$entry"
+              done
       - persist_to_workspace:
           root: /root/project
           paths:
@@ -51,7 +45,7 @@ jobs:
           at: /root/workspace
       - run:
           name: "Check files"
-          commang:
+          command:
             for entry in /root/workspace/*
               do
                 echo "$entry"
