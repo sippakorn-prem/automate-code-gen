@@ -26,7 +26,7 @@ jobs:
       - run:
           name: "Check files"
           command:
-            for entry in /root/workspace/*
+            for entry in /root/workspace/.*/
               do
                 echo "$entry"
               done
