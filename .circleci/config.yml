@@ -50,5 +50,12 @@ jobs:
       - attach_workspace:
           at: /root/workspace
       - run:
+          name: "Check files"
+          commang:
+            for entry in /root/workspace/*
+              do
+                echo "$entry"
+              done
+      - run:
           name: "Publish to the Google Chrome Store"
           command: publish /root/workspace/code-gen.zip
