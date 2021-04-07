@@ -25,11 +25,11 @@ jobs:
       - run:
           name: "Install Dependencies"
           command: echo "You can also install Yarn, NPM, or anything else you need to use to build and test your extension."
-      - run:
-          name: "Make Extension Production Ready"
-          command: |
-            jq '.version = "new-version"' manifest.json | sponge manifest.json
-            jq '.browser_action.default_icon = "icon.png"' manifest.json | sponge manifest.json
+      # - run:
+      #     name: "Make Extension Production Ready"
+      #     command: |
+      #       jq '.version = "new-version"' manifest.json | sponge manifest.json
+      #       jq '.browser_action.default_icon = "icon.png"' manifest.json | sponge manifest.json
       - run:
           name: "Run Tests"
           command: echo "Run any tests here."
