@@ -7,11 +7,12 @@
   "main": "index.js",
   "scripts": {
     "build": "set NODE_ENV=production & webpack",
-    "dist": "npm run build & node scripts/zip.js"
+    "chrome-publish": "npm run build & node scripts/chrome-publish.js"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
+    "chrome-webstore-upload": "^0.4.4",
     "classnames": "^2.2.6",
     "clsx": "^1.1.1",
     "react": "^17.0.1",

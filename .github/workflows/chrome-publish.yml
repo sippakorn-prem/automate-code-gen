@@ -3,10 +3,6 @@
 name: Publish to chrome extension
 
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -30,17 +26,11 @@ jobs:
         with:
           path: '.'
           key: ${{ github.sha }}
-      - name: Build & Zip
-        run: npm run dist
-  
-  publish:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Chrome Extension upload & publish
-        uses: Klemensas/chrome-extension-upload-action@v1.3
-        with:
-          client-id: ${{ secrets.CLIENT_ID }}'
-          file-name: code-gen.zip
-          app-id: ${{ secrets.APP_ID }}'
-          publish: true
+      - name: Build & Publish
+        run: npm run chrome-publish
+        env:
+          CI: true
+          EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}

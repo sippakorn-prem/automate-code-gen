@@ -6,6 +6,13 @@ const zipFolder = require('zip-folder')
 const DEST_DIR = path.join(__dirname, '../dist')
 const DEST_ZIP_DIR = path.join(__dirname, '../')
 
+// const webStore = require('chrome-webstore-upload')({
+//   extensionId: 'pbdnkibbagoclabhijnllmalclnhobpo',
+//   clientId: '613314979535-bmlcd7nu2bghm2hd28ceif29phv97mvm.apps.googleusercontent.com',
+//   clientSecret: 'P4PDKF8dCHFNqvNMsMUQ6Hvn',
+//   refreshToken: '1//0gxNEKTv5DAl9CgYIARAAGBASNwF-L9IrJn4aeDKNUtkrNzwMVotk89vT_Hx2LVV7qn37j2LNsI28bVYG4fFT1U61s4o9eEkHwPw' 
+// })
+
 const extractExtensionData = () => {
   const extPackageJson = require('../package.json')
 
@@ -36,14 +43,25 @@ const buildZip = (src, dist, zipFilename) => {
 }
 
 const main = () => {
-  const {name, version} = extractExtensionData()
+  // const { name, version } = extractExtensionData()
   // const zipFilename = `${name}-v${version}.zip`
-  const zipFilename = 'code-gen.zip'
+  const zipFilename = `code-gen.zip`
 
   makeDestZipDirIfNotExists()
 
   buildZip(DEST_DIR, DEST_ZIP_DIR, zipFilename)
-    .then(() => console.info('OK'))
+    .then(() => {
+      const myZipFile = fs.createReadStream(`${DEST_ZIP_DIR}/${zipFilename}`)
+      // webStore.uploadExisting(myZipFile).then(res => {
+      //   console.log(res)
+      // })
+      console.log({
+        extensionId: process.env.EXTENSION_ID,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        refreshToken: process.env.REFRESH_TOKEN
+      })
+    })
     .catch(console.err)
 }
 
