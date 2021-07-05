@@ -14,8 +14,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: npm install
-        run: npm install
+      - run: npm install
       - uses: actions/cache@v1
         id: cache-dependencies
         with:
@@ -31,8 +30,7 @@ jobs:
         with:
           path: '.'
           key: ${{ github.sha }}
-      - name: npm run build
-        run: npm run build
+      - run: npm run build-extension
       - name: Check file
         shell: bash
         run: |
