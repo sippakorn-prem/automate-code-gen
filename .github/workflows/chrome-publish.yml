@@ -10,7 +10,6 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    needs: dependencies
     env:
       EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
       CLIENT_ID: ${{ secrets.CLIENT_ID }}
