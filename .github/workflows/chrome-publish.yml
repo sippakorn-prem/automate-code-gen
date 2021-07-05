@@ -17,7 +17,7 @@ jobs:
           path: '.'
           key: ${{ github.sha }}
       - name: Run publish script
-        run: npm run chrome-publish
+        run: node scripts/chrome-publish.js
       - name: Check file
         shell: bash
         run: |
