@@ -7,7 +7,7 @@
   "main": "index.js",
   "scripts": {
     "build": "set NODE_ENV=production & webpack",
-    "build-extension": "npm run build & node script/build-extension.js",
+    "build-extension": "npm run build & node scripts/build-extension.js",
     "chrome-publish": "node scripts/chrome-publish.js"
   },
   "dependencies": {
