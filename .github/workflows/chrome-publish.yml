@@ -1,6 +1,11 @@
 name: Publish to chrome extension
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    workflows: ["Build chrome extension"]
+    branches: [main]
+    types: 
+      - completed
 
 jobs:
   publish:
