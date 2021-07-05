@@ -5,7 +5,6 @@ const path = require('path')
 class PublishChromeExtension {
   constructor () {
     this.zipFilename = 'code-gen.zip'
-    this.sourceFolder = path.join(__dirname, '../')
     this.webStore = null
   }
   init () {
@@ -21,7 +20,7 @@ class PublishChromeExtension {
     })
   }
   uploadFile () {
-    const myZipFile = fs.createReadStream(`${this.sourceFolder}/${this.zipFilename}`)
+    const myZipFile = fs.createReadStream(`../${this.zipFilename}`)
     console.log(this.webStore)
     // this.webStore.uploadExisting(myZipFile).then(res => {
     //   console.log(res)
