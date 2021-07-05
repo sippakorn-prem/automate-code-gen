@@ -5,7 +5,7 @@ const path = require('path')
 class PublishChromeExtension {
   constructor () {
     this.zipFilename = 'code-gen.zip'
-    this.sourceFolder = path.join(__dirname, '../dist')
+    this.sourceFolder = path.join(__dirname, '../')
     this.webStore = null
   }
   init () {
