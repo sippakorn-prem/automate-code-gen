@@ -29,7 +29,9 @@ class PublishChromExtension {
         if (this.workflow.id) {
           const data = await this.getData('https://api.github.com/repos/sippakorn-prem/automate-code-gen/actions/runs')
           this.lastWorkflowRun = data && data.total_count ? 
-            data.workflow_runs.filter(({ workflow_id }) => workflow_id === this.workflow.id)[0] : {}
+            data.workflow_runs.filter(
+              ({ workflow_id, status }) => workflow_id === this.workflow.id && status === 'complete'
+            )[0] : {}
         }
         resolve()
       } catch (err) { reject(err) }
