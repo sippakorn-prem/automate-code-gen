@@ -3,11 +3,8 @@ import './App.css'
 import Controller from './Controller'
 import SelectEvent  from './SelectEvent'
 import EventList from './EventList'
-<<<<<<< HEAD
-=======
 import { Typography } from '@material-ui/core'
 
->>>>>>> main
 export default class App extends Component { 
   constructor (props){
     super(props)
