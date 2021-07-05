@@ -8,7 +8,8 @@
   "scripts": {
     "build": "set NODE_ENV=production & webpack",
     "build-extension": "npm run build & node scripts/build-extension.js",
-    "chrome-publish": "node scripts/chrome-publish.js"
+    "chrome-publish": "node scripts/chrome-publish.js",
+    "zip": "node scripts/zip.js"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
@@ -20,7 +21,8 @@
     "react": "^17.0.1",
     "react-copy-to-clipboard": "^5.0.3",
     "react-dom": "^17.0.1",
-    "react-syntax-highlighter": "^15.4.3"
+    "react-syntax-highlighter": "^15.4.3",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@babel/core": "^7.13.8",

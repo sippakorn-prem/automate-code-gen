@@ -38,3 +38,4 @@ jobs:
         with:
           name: code-gen
           path: dist
+          retention-days: 7
