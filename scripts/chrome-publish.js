@@ -74,7 +74,7 @@ class PublishChromExtension {
           response.pipe(file)
           file.on('finish',() => {
             filePath.close()
-            console.log('Download Completed'); 
+            console.log('Download Completed');
           })
         })
         resolve()

@@ -17,3 +17,4 @@ jobs:
         shell: bash
         run: |
           ls
+          zip –sf code-gen.zip
