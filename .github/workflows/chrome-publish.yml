@@ -11,9 +11,15 @@ jobs:
       CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
     steps:
-      - name: Download zip file
-        uses: actions/download-artifact@v2
+      # - name: Download zip file
+      #   uses: actions/download-artifact@v2
+      #   with:
+      #     name: zipped
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: build-extension.yml
+          branch: master
           name: zipped
       - name: Check file
         shell: bash
