@@ -2,9 +2,7 @@ name: Build chrome extension
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   dependencies:
