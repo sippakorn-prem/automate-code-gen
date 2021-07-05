@@ -7,17 +7,22 @@
   "main": "index.js",
   "scripts": {
     "build": "set NODE_ENV=production & webpack",
-    "dist": "npm run build & node scripts/zip.js"
+    "build-extension": "npm run build & node scripts/build-extension.js",
+    "chrome-publish": "node scripts/chrome-publish.js",
+    "zip": "node scripts/zip.js"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
+    "chrome-webstore-upload": "^0.4.4",
     "classnames": "^2.2.6",
     "clsx": "^1.1.1",
+    "node-fetch": "^2.6.1",
     "react": "^17.0.1",
     "react-copy-to-clipboard": "^5.0.3",
     "react-dom": "^17.0.1",
-    "react-syntax-highlighter": "^15.4.3"
+    "react-syntax-highlighter": "^15.4.3",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@babel/core": "^7.13.8",

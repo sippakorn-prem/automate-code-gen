@@ -1,9 +1,8 @@
-name: Publish to chrome extension
+name: Build chrome extension
 
 on:
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
+  push:
+    branches: [ main, develop ]
 
 jobs:
   dependencies:
@@ -28,25 +27,13 @@ jobs:
           path: '.'
           key: ${{ github.sha }}
       - run: npm run build
-      - run: npm run zip
       - name: Check file
         shell: bash
         run: |
           ls
-          zip –sf code-gen.zip
-
-  publish:
-    runs-on: ubuntu-latest
-    needs: build
-    env:
-      EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
-      CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
-    steps:
-      - uses: actions/cache@v1
-        id: restore-dependencies
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
         with:
-          path: '.'
-          key: ${{ github.sha }}
-      - run: npm run chrome-publish
+          name: code-gen
+          path: dist
+          retention-days: 7

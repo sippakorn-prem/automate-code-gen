@@ -3,6 +3,11 @@ import './App.css'
 import Controller from './Controller'
 import SelectEvent  from './SelectEvent'
 import EventList from './EventList'
+<<<<<<< HEAD
+=======
+import { Typography } from '@material-ui/core'
+
+>>>>>>> main
 export default class App extends Component { 
   constructor (props){
     super(props)
@@ -86,6 +91,9 @@ export default class App extends Component {
     
     return (
       <div className="root">
+        <Typography variant="caption" display="block" gutterBottom>
+          Automate Code Gen
+        </Typography>
         <Controller {... { isRecording, liveEvents, toggleRecord, toggleReset }} />
         {Boolean(Object.keys(liveEvents).length) && <SelectEvent { ... { liveEvents, currentEvent, onChangeEvent } }/>}
         <EventList {... { liveEvents, currentEvent }}/>
