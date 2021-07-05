@@ -12,6 +12,11 @@ jobs:
       REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v1
+        id: restore-dependencies
+        with:
+          path: '.'
+          key: ${{ github.sha }}
       - name: Run publish script
         run: npm run chrome-publish
       - name: Check file
