@@ -30,7 +30,7 @@ jobs:
         with:
           path: '.'
           key: ${{ github.sha }}
-      - run: npm run build-extension
+      - run: npm run build
       - name: Check file
         shell: bash
         run: |
@@ -38,5 +38,5 @@ jobs:
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: zipped
-          path: './code-gen.zip'
+          name: code-gen
+          path: dist

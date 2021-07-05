@@ -13,3 +13,7 @@ jobs:
     steps:
       - name: Run publish script
         run: npm run chrome-publish
+      - name: Check file
+        shell: bash
+        run: |
+          ls
