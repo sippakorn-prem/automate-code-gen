@@ -18,9 +18,14 @@ jobs:
           path: '.'
           key: ${{ github.sha }}
 
-  build:
+  publish:
     runs-on: ubuntu-latest
     needs: dependencies
+    env:
+      EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
     steps:
       - uses: actions/cache@v1
         id: restore-dependencies
@@ -34,19 +39,4 @@ jobs:
         run: |
           ls
           zip –sf code-gen.zip
-
-  publish:
-    runs-on: ubuntu-latest
-    needs: build
-    env:
-      EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
-      CLIENT_ID: ${{ secrets.CLIENT_ID }}
-      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-      REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
-    steps:
-      - uses: actions/cache@v1
-        id: restore-dependencies
-        with:
-          path: '.'
-          key: ${{ github.sha }}
       - run: npm run chrome-publish
