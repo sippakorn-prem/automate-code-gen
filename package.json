@@ -7,7 +7,7 @@
   "main": "index.js",
   "scripts": {
     "build": "set NODE_ENV=production & webpack",
-    "chrome-publish": "npm run build & node scripts/chrome-publish.js"
+    "chrome-publish": "node scripts/chrome-publish.js"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
