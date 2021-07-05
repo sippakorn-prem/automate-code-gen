@@ -52,16 +52,9 @@ const main = () => {
   buildZip(DEST_DIR, DEST_ZIP_DIR, zipFilename)
     .then(() => {
       const myZipFile = fs.createReadStream(`${DEST_ZIP_DIR}/${zipFilename}`)
+      console.log(myZipFile)
       // webStore.uploadExisting(myZipFile).then(res => {
       //   console.log(res)
-      // })
-      console.log(process.env)
-      console.log(webStore)
-      // console.log({
-      //   extensionId: process.env.EXTENSION_ID,
-      //   clientId: process.env.CLIENT_ID,
-      //   clientSecret: process.env.CLIENT_SECRET,
-      //   refreshToken: process.env.REFRESH_TOKEN
       // })
     })
     .catch(console.err)
