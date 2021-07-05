@@ -11,13 +11,9 @@ jobs:
       CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
     steps:
-      - uses: actions/cache@v1
-        id: restore-dependencies
-        with:
-          path: '.'
-          key: ${{ github.sha }}
+      - uses: actions/checkout@v2
       - name: Run publish script
-        run: node scripts/chrome-publish.js
+        run: npm run chrome-publish
       - name: Check file
         shell: bash
         run: |
