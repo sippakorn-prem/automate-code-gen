@@ -1,0 +1,13 @@
+{
+  "workbench.iconTheme": "vscode-icons",
+  "workbench.colorTheme": "One Dark Pro",
+  "workbench.statusBar.visible": true,
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "all",
+  "git.autofetch": true,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.endOfLine": "auto"
+}

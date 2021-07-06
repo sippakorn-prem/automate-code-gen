@@ -1,14 +1,15 @@
 import React from 'react'
-import classNames from 'classnames';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Button } from '@material-ui/core'
-import { red } from '@material-ui/core/colors';
-import { FiberManualRecord, Stop } from '@material-ui/icons';
+import classNames from 'classnames'
+import { makeStyles } from '@material-ui/core/styles'
+import { Box, Button, Typography } from '@material-ui/core'
+import { grey, red } from '@material-ui/core/colors'
+import { FiberManualRecord, Stop } from '@material-ui/icons'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
+const useStyles = makeStyles(theme => ({
+  root: {},
+  recordControl: {
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   btn: {
     margin: theme.spacing(2),
@@ -28,22 +29,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function Controller (props){
+function Controller(props) {
   const classes = useStyles()
-  const { isRecording, liveEvents = {}, toggleRecord, toggleReset } = props
+  const { isRecording, liveEvents = [], toggleRecord, toggleReset, routeLocation } = props
 
   return (
     <Box className={classes.root} boxShadow={3}>
-      <Button
-        className={classNames(classes.btn, isRecording ? classes.btnRecording : classes.btnRecord)}
-        startIcon={isRecording ? <Stop/>: <FiberManualRecord/>}
-        variant={isRecording ? 'contained' : 'text'}
-        onClick={toggleRecord}>
-        {isRecording ? 'Stop' : 'Record'}
-      </Button>
-      {Boolean(Object.keys(liveEvents).length) &&
-        <Button className={classes.btn} color="primary" onClick={toggleReset}>Reset</Button>
-      }
+      <div className='p-12'>
+        <Typography>Automate Code Gen</Typography>
+        <Typography variant='caption' display='block' gutterBottom>
+          {routeLocation?.href || ''}
+        </Typography>
+      </div>
+      <div className={classes.recordControl}>
+        <Button
+          className={classNames(classes.btn, isRecording ? classes.btnRecording : classes.btnRecord)}
+          startIcon={isRecording ? <Stop /> : <FiberManualRecord />}
+          variant={isRecording ? 'contained' : 'text'}
+          onClick={toggleRecord}
+        >
+          {isRecording ? 'Stop' : 'Record'}
+        </Button>
+        {Boolean(liveEvents.length) && (
+          <Button className={classes.btn} color='primary' onClick={toggleReset}>
+            Reset
+          </Button>
+        )}
+      </div>
     </Box>
   )
 }
