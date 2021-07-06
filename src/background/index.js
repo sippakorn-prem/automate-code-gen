@@ -46,8 +46,8 @@ class RecordingController {
   handleMessage = (message, sender) => {
     const msg = message && JSON.parse(message)
     if (msg) {
-      if (this._recording[msg.action]) this._recording[msg.action].push(msg)
-      else this._recording[msg.action] = [msg]
+      if (this._recording[msg.action.name]) this._recording[msg.action.name].push(msg)
+      else this._recording[msg.action.name] = [msg]
       console.log({ _recording: this._recording })
       chrome.storage.local.set({ recordingEvents: this._recording })
     }

@@ -1,5 +1,10 @@
 const eventsToRecord = ['click', 'dblclick', 'change', 'keydown', 'select', 'submit', 'load', 'unload']
 
+import { regexClickMenu } from '../utils/eventActionTypeRegex.js'
+
+String.prototype.capitalize = function () {
+  return this.charAt(0).toUpperCase() + this.slice(1)
+}
 export default class EventRecorder {
   init() {
     this.initializeRecorder()
@@ -31,13 +36,15 @@ export default class EventRecorder {
   recordEvent = e => {
     const wrapper = this.getTargetWrapper(e.target).reverse()
     const wrapperSelector = wrapper.map(s => `[data-qa="${s}"]`).join(' ')
+    const dataQa = e.target?.getAttribute?.('data-qa') || null
     const msgObj = {
-      action: e.type,
+      action: this.getEventAction({ event: e, wrapper, dataQa }),
       selector: e.target?.getAttribute?.('class'),
       wrapper,
       wrapperSelector,
       route: window.location,
-      dataQa: e.target?.getAttribute?.('data-qa') || null,
+      hrd: window.location.pathname.includes('/dashboard') ? 'dashboard' : 'web',
+      dataQa,
     }
     console.log({
       ...msgObj,
@@ -47,7 +54,14 @@ export default class EventRecorder {
     this.sendMessage(JSON.stringify(msgObj))
   }
 
-  getTargetWrapper(event, wrapper = []) {
+  getEventAction = props => {
+    return {
+      name: props?.event?.type,
+      type: this.classifyEventActionType(props),
+    }
+  }
+
+  getTargetWrapper = (event, wrapper = []) => {
     if (wrapper.length >= 3) return wrapper
     else {
       if (event?.parentNode?.getAttribute?.('data-qa')) {
@@ -60,5 +74,14 @@ export default class EventRecorder {
 
   setRouteLocation = () => {
     chrome.storage.local.set({ routeLocation: JSON.stringify(window.location) })
+  }
+
+  classifyEventActionType = props => {
+    return this[`getEventActionType${props?.event?.type.capitalize()}`]?.(props) || ''
+  }
+
+  getEventActionTypeClick = ({ event, wrapper, dataQa }) => {
+    const isClickMenu = dataQa?.match(regexClickMenu) || wrapper.some(wr => wr.match(regexClickMenu))
+    if (isClickMenu) return 'menu'
   }
 }
