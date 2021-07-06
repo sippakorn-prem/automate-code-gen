@@ -1,3 +1,4 @@
 export default {
-  regexClickMenu: /menu-/gm,
+  clickMenu: /^menu-/gm,
+  clickTabMenu: /^tab-/gm,
 }

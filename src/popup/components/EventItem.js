@@ -4,7 +4,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { makeStyles } from '@material-ui/core/styles'
 import { IconButton, Chip, Divider } from '@material-ui/core'
 import { FileCopy } from '@material-ui/icons'
-import { regexClickMenu } from '../../utils/eventActionTypeRegex.js'
+import regex from '../../utils/eventActionTypeRegex.js'
 import { hyphens2camel } from '../../utils/function.js'
 
 const useStyles = makeStyles(theme => ({
@@ -35,20 +35,33 @@ function EventItem(props) {
 
   function codeClick() {
     return data.reduce((code, eventAction) => {
-      return code + classifyCodeClick(eventAction) + '\n'
+      const classifiedCode = classifyCodeClick(eventAction)
+      if (classifiedCode) return code + classifiedCode + '\n'
+      return code
     }, '')
   }
 
   function classifyCodeClick(eventAction) {
     const type = eventAction?.action?.type
     if (type === 'menu') return generateCodeClickMenu(eventAction)
+    else if (type === 'tab-menu') return generateCodeClickTabMenu(eventAction)
   }
 
-  function generateCodeClickMenu({ hrd, dataQa, wrapper }) {
-    let contentType = dataQa?.match(regexClickMenu) ? dataQa : wrapper.find(wr => wr.match(regexClickMenu))
+  function generateCodeClickMenu(eventAction) {
+    let contentType = getMatchDataQa({ ...eventAction, regexName: 'clickMenu' })
     contentType = contentType?.split('menu-')?.[1] || ''
     contentType = hyphens2camel(contentType)
-    return `$.suiteGotoMenu($store.menu.${hrd}.${contentType})`
+    return `$.suiteGotoMenu($store.menu.${eventAction.hrd}.${contentType})`
+  }
+
+  function generateCodeClickTabMenu(eventAction) {
+    let tabName = getMatchDataQa({ ...eventAction, regexName: 'clickTabMenu' })
+    console.log(tabName)
+    return `$.suiteClick({ name: '', type: 'tab', selector: '[data-qa="${tabName}"]' })`
+  }
+
+  function getMatchDataQa({ dataQa, wrapper, regexName }) {
+    return dataQa?.match(regex[regexName]) ? dataQa : wrapper.find(wr => wr.match(regex[regexName]))
   }
 
   useEffect(() => {

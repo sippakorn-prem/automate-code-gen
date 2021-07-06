@@ -1,6 +1,6 @@
 const eventsToRecord = ['click', 'dblclick', 'change', 'keydown', 'select', 'submit', 'load', 'unload']
 
-import { regexClickMenu } from '../utils/eventActionTypeRegex.js'
+import regex from '../utils/eventActionTypeRegex.js'
 
 String.prototype.capitalize = function () {
   return this.charAt(0).toUpperCase() + this.slice(1)
@@ -81,7 +81,8 @@ export default class EventRecorder {
   }
 
   getEventActionTypeClick = ({ event, wrapper, dataQa }) => {
-    const isClickMenu = dataQa?.match(regexClickMenu) || wrapper.some(wr => wr.match(regexClickMenu))
-    if (isClickMenu) return 'menu'
+    const isMatch = regex => dataQa?.match(regex) || wrapper.some(wr => wr.match(regex))
+    if (isMatch(regex.clickMenu)) return 'menu'
+    else if (isMatch(regex.clickTabMenu)) return 'tab-menu'
   }
 }
