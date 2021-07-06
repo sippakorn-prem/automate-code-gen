@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import './App.css'
 import Controller from './Controller'
-import SelectEvent from './SelectEvent'
 import EventList from './EventList'
 export default class App extends Component {
   constructor(props) {
@@ -9,14 +8,9 @@ export default class App extends Component {
     this.state = {
       extensionBus: null,
       isRecording: false,
-      liveEvents: {},
+      liveEvents: [],
       routeLocation: {},
-      currentEvent: 'click',
     }
-  }
-
-  onChangeEvent = event => {
-    this.setState({ currentEvent: event.target.value })
   }
 
   toggleRecord = async () => {
@@ -81,15 +75,14 @@ export default class App extends Component {
   }
 
   render() {
-    const { toggleRecord, toggleReset, onChangeEvent } = this
-    const { isRecording, liveEvents = {}, currentEvent, routeLocation } = this.state
+    const { toggleRecord, toggleReset } = this
+    const { isRecording, liveEvents = [], routeLocation } = this.state
     const controllerProps = { routeLocation, isRecording, liveEvents, toggleRecord, toggleReset }
-    const eventListProps = { liveEvents, currentEvent }
+    const eventListProps = { liveEvents }
 
     return (
       <div className='root'>
         <Controller {...controllerProps} />
-        {/* {Boolean(Object.keys(liveEvents).length) && <SelectEvent { ... { liveEvents, currentEvent, onChangeEvent } }/>} */}
         <EventList {...eventListProps} />
       </div>
     )

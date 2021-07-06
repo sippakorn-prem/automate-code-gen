@@ -6,7 +6,7 @@ import { hyphens2camel, capitalize } from '../../utils/function.js'
 import { generalBtn } from '../../utils/state.js'
 
 import { makeStyles } from '@material-ui/core/styles'
-import { IconButton, Chip, Divider } from '@material-ui/core'
+import { IconButton } from '@material-ui/core'
 import { FileCopy } from '@material-ui/icons'
 
 const useStyles = makeStyles(theme => ({
@@ -27,20 +27,21 @@ const useStyles = makeStyles(theme => ({
 
 function EventItem(props) {
   const classes = useStyles()
-  const { data = [], liveEvents, currentEvent } = props
+  const { list = [] } = props
   const [code, setCode] = useState('')
 
   function getCode() {
-    if (currentEvent === 'click') return codeClick()
-    return ''
-  }
-
-  function codeClick() {
-    return data.reduce((code, eventAction) => {
-      const classifiedCode = classifyCodeClick(eventAction)
+    return list.reduce((code, eventAction) => {
+      let classifiedCode = getClassifiedCode(eventAction)
       if (classifiedCode) return code + classifiedCode + '\n'
       return code
     }, '')
+  }
+
+  function getClassifiedCode(eventAction) {
+    const evnetType = eventAction?.action?.name
+    if (evnetType === 'click') return classifyCodeClick(eventAction)
+    // else if (evnetType === 'mouseover') return classifyCodeMouseover(eventAction)
   }
 
   function classifyCodeClick(eventAction) {
@@ -53,7 +54,13 @@ function EventItem(props) {
     else if (type === 'edit-row') return generateCodeClickEditRow(eventAction)
     else if (type === 'detail-row') return generateCodeClickDetailRow(eventAction)
     else if (generalBtn.includes(type)) return generateCodeClickGeneral(eventAction)
+    else if (type === 'btn-group') return generateCodeClickBtnGroup(eventAction)
   }
+
+  // function classifyCodeMouseover(eventAction) {
+  //   const type = eventAction?.action?.type
+  //   if (type === 'btn-group') return generateCodeHoverBtnGroup(eventAction)
+  // }
 
   function generateCodeClickMenu(eventAction) {
     let contentType = getMatchDataQa({ ...eventAction, regexName: 'clickMenu' })
@@ -61,18 +68,27 @@ function EventItem(props) {
     contentType = hyphens2camel(contentType)
     return `$.suiteGotoMenu($store.menu.${eventAction.hrd}.${contentType})`
   }
-
   function generateCodeClickTabMenu(eventAction) {
     let tabName = getMatchDataQa({ ...eventAction, regexName: 'clickTabMenu' })
     return `$.suiteClick({ name: '', type: 'tab', selector: '[data-qa="${tabName}"]' })`
   }
-
   function generateCodeClickBreadcrumb(eventAction) {
     let index = getMatchDataQa({ ...eventAction, regexName: 'clickBreadcrumb' })
     index = index?.split('breadcrumb-')?.[1] || ''
     return `$.suiteClick({ type: 'breadcrumb', index: ${index} })`
   }
-
+  function generateCodeClickClose() {
+    return `$.suiteClick({ name: '', type: 'close' })`
+  }
+  function generateCodeClickCard() {
+    return `$.suiteClick({ name: '', type: 'card' })`
+  }
+  function generateCodeClickEditRow() {
+    return `$.suiteClick({ name: '', type: 'edit-row' })`
+  }
+  function generateCodeClickDetailRow() {
+    return `$.suiteClick({ name: '', type: 'detail-row' })`
+  }
   function generateCodeClickGeneral(eventAction) {
     const type = capitalize(hyphens2camel(eventAction?.action?.type))
     let dataQa = getMatchDataQa({ ...eventAction, regexName: `click${type}` })
@@ -81,22 +97,16 @@ function EventItem(props) {
       return `$.suiteClick({ type: '${eventAction?.action?.type}'${wrapper} })`
     }
   }
-
-  function generateCodeClickClose() {
-    return `$.suiteClick({ name: '', type: 'close' })`
+  function generateCodeClickBtnGroup(eventAction) {
+    let dataQaBtn = getMatchDataQa({ ...eventAction, regexName: 'clickButton' })
+    let dataQaHover = getMatchDataQa({ ...eventAction.hoverEvent, regexName: 'hoverBtnGroup' })
+    if (dataQaBtn && dataQaHover) return `$.suiteClick({ name: '', selectorHover: '[data-qa="${dataQaHover}"]', selector: '[data-qa="${dataQaBtn}"]' })`
   }
 
-  function generateCodeClickCard() {
-    return `$.suiteClick({ name: '', type: 'card' })`
-  }
-
-  function generateCodeClickEditRow() {
-    return `$.suiteClick({ name: '', type: 'edit-row' })`
-  }
-
-  function generateCodeClickDetailRow() {
-    return `$.suiteClick({ name: '', type: 'detail-row' })`
-  }
+  // function generateCodeHoverBtnGroup(eventAction) {
+  //   let dataQa = getMatchDataQa({ ...eventAction, regexName: 'hoverBtnGroup' })
+  //   if (dataQa) return `$.suiteClick({ name: '', selectorHover: '[data-qa="${dataQa}"]', selector: '' })`
+  // }
 
   function getMatchDataQa({ dataQa, wrapper, regexName }) {
     return dataQa?.match(regex[regexName]) ? dataQa : wrapper.find(wr => wr.match(regex[regexName]))
@@ -104,7 +114,7 @@ function EventItem(props) {
 
   useEffect(() => {
     setCode(getCode())
-  }, [liveEvents, currentEvent])
+  }, [list])
 
   return (
     <>

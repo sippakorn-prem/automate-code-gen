@@ -11,11 +11,11 @@ const useStyles = makeStyles(theme => ({
 
 function EventList(props) {
   const classes = useStyles()
-  const { liveEvents = {}, currentEvent } = props
+  const { liveEvents = [] } = props
 
   return (
     <div className={classes.root}>
-      <EventItem data={liveEvents[currentEvent]} {...{ liveEvents, currentEvent }} />
+      <EventItem list={liveEvents} />
     </div>
   )
 }

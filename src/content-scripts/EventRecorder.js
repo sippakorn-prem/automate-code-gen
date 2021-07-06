@@ -1,4 +1,4 @@
-const eventsToRecord = ['click', 'dblclick', 'change', 'keydown', 'select', 'submit', 'load', 'unload']
+const eventsToRecord = ['click', 'dblclick', 'change', 'keydown', 'select', 'submit', 'load', 'unload', 'mouseover']
 
 import regex from '../utils/eventActionTypeRegex.js'
 import { capitalize, hyphens2camel } from '../utils/function.js'
@@ -44,11 +44,14 @@ export default class EventRecorder {
       hrd: window.location.pathname.includes('/dashboard') ? 'dashboard' : 'web',
       dataQa,
     }
-    console.log({
-      ...msgObj,
-      event: e,
-      target: e.target,
-    })
+    if (msgObj.action.name === 'mouseover' ? msgObj.action.type : true) {
+      console.log({
+        ...msgObj,
+        event: e,
+        target: e.target,
+      })
+    }
+
     this.sendMessage(JSON.stringify(msgObj))
   }
 
@@ -91,5 +94,10 @@ export default class EventRecorder {
     else if (isMatch(regex.clickEditRow)) return 'edit-row'
     else if (isMatch(regex.clickDetailRow)) return 'detail-row'
     else if (isMatchGeneral) return generalBtnType
+  }
+
+  getEventActionTypeMouseover = ({ wrapper, dataQa }) => {
+    const isMatch = regex => dataQa?.match(regex) || wrapper.some(wr => wr.match(regex))
+    if (isMatch(regex.hoverBtnGroup)) return 'btn-group'
   }
 }
