@@ -46,6 +46,7 @@ function EventItem(props) {
     if (type === 'menu') return generateCodeClickMenu(eventAction)
     else if (type === 'tab-menu') return generateCodeClickTabMenu(eventAction)
     else if (type === 'breadcrumb') return generateCodeClickBreadcrumb(eventAction)
+    else if (type === 'card') return generateCodeClickCard(eventAction)
   }
 
   function generateCodeClickMenu(eventAction) {
@@ -64,6 +65,10 @@ function EventItem(props) {
     let index = getMatchDataQa({ ...eventAction, regexName: 'clickBreadcrumb' })
     index = index?.split('breadcrumb-')?.[1] || ''
     return `$.suiteClick({ type: 'breadcrumb', index: ${index} })`
+  }
+
+  function generateCodeClickCard(eventAction) {
+    return `$.suiteClick({ name: '', type: 'card' })`
   }
 
   function getMatchDataQa({ dataQa, wrapper, regexName }) {

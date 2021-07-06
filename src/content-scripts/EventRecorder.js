@@ -85,5 +85,6 @@ export default class EventRecorder {
     if (isMatch(regex.clickMenu)) return 'menu'
     else if (isMatch(regex.clickTabMenu)) return 'tab-menu'
     else if (isMatch(regex.clickBreadcrumb)) return 'breadcrumb'
+    else if (isMatch(regex.clickCard)) return 'card'
   }
 }
