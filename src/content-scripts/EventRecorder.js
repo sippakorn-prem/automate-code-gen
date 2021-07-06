@@ -1,10 +1,8 @@
 const eventsToRecord = ['click', 'dblclick', 'change', 'keydown', 'select', 'submit', 'load', 'unload']
 
 import regex from '../utils/eventActionTypeRegex.js'
-
-String.prototype.capitalize = function () {
-  return this.charAt(0).toUpperCase() + this.slice(1)
-}
+import { capitalize, hyphens2camel } from '../utils/function.js'
+import { generalBtn } from '../utils/state.js'
 export default class EventRecorder {
   init() {
     this.initializeRecorder()
@@ -77,15 +75,21 @@ export default class EventRecorder {
   }
 
   classifyEventActionType = props => {
-    return this[`getEventActionType${props?.event?.type.capitalize()}`]?.(props) || ''
+    return this[`getEventActionType${capitalize(props?.event?.type)}`]?.(props) || ''
   }
 
   getEventActionTypeClick = ({ event, wrapper, dataQa }) => {
     const isMatch = regex => dataQa?.match(regex) || wrapper.some(wr => wr.match(regex))
+    const isMatchGeneral = generalBtn.some(btnType => isMatch(regex[`click${capitalize(hyphens2camel(btnType))}`]))
+    const generalBtnType = generalBtn.find(btnType => isMatch(regex[`click${capitalize(hyphens2camel(btnType))}`]))
+
     if (isMatch(regex.clickMenu)) return 'menu'
     else if (isMatch(regex.clickTabMenu)) return 'tab-menu'
     else if (isMatch(regex.clickBreadcrumb)) return 'breadcrumb'
+    else if (isMatch(regex.clickClose)) return 'close'
     else if (isMatch(regex.clickCard)) return 'card'
     else if (isMatch(regex.clickEditRow)) return 'edit-row'
+    else if (isMatch(regex.clickDetailRow)) return 'detail-row'
+    else if (isMatchGeneral) return generalBtnType
   }
 }

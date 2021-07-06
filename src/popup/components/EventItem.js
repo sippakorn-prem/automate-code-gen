@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Prism } from 'react-syntax-highlighter'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
+import regex from '../../utils/eventActionTypeRegex.js'
+import { hyphens2camel, capitalize } from '../../utils/function.js'
+import { generalBtn } from '../../utils/state.js'
+
 import { makeStyles } from '@material-ui/core/styles'
 import { IconButton, Chip, Divider } from '@material-ui/core'
 import { FileCopy } from '@material-ui/icons'
-import regex from '../../utils/eventActionTypeRegex.js'
-import { hyphens2camel } from '../../utils/function.js'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -46,8 +48,11 @@ function EventItem(props) {
     if (type === 'menu') return generateCodeClickMenu(eventAction)
     else if (type === 'tab-menu') return generateCodeClickTabMenu(eventAction)
     else if (type === 'breadcrumb') return generateCodeClickBreadcrumb(eventAction)
+    else if (type === 'close') return generateCodeClickClose(eventAction)
     else if (type === 'card') return generateCodeClickCard(eventAction)
     else if (type === 'edit-row') return generateCodeClickEditRow(eventAction)
+    else if (type === 'detail-row') return generateCodeClickDetailRow(eventAction)
+    else if (generalBtn.includes(type)) return generateCodeClickGeneral(eventAction)
   }
 
   function generateCodeClickMenu(eventAction) {
@@ -68,12 +73,29 @@ function EventItem(props) {
     return `$.suiteClick({ type: 'breadcrumb', index: ${index} })`
   }
 
+  function generateCodeClickGeneral(eventAction) {
+    const type = capitalize(hyphens2camel(eventAction?.action?.type))
+    let dataQa = getMatchDataQa({ ...eventAction, regexName: `click${type}` })
+    if (dataQa) {
+      const wrapper = eventAction?.wrapper?.length ? `, wrapper: '${eventAction?.wrapperSelector}'` : ''
+      return `$.suiteClick({ type: '${eventAction?.action?.type}'${wrapper} })`
+    }
+  }
+
+  function generateCodeClickClose() {
+    return `$.suiteClick({ name: '', type: 'close' })`
+  }
+
   function generateCodeClickCard() {
     return `$.suiteClick({ name: '', type: 'card' })`
   }
 
   function generateCodeClickEditRow() {
     return `$.suiteClick({ name: '', type: 'edit-row' })`
+  }
+
+  function generateCodeClickDetailRow() {
+    return `$.suiteClick({ name: '', type: 'detail-row' })`
   }
 
   function getMatchDataQa({ dataQa, wrapper, regexName }) {

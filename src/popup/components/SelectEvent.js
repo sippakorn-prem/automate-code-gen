@@ -1,6 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { FormControl, InputLabel, Select } from '@material-ui/core'
+import { capitalize } from '../../utils/function.js'
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -16,10 +17,6 @@ function EventList(props) {
   const classes = useStyles()
   const { liveEvents, currentEvent, onChangeEvent } = props
 
-  String.prototype.capitalize = function () {
-    return this.charAt(0).toUpperCase() + this.slice(1)
-  }
-
   return (
     <div className={classes.root}>
       <FormControl className={classes.formControl}>
@@ -27,7 +24,7 @@ function EventList(props) {
         <Select native value={currentEvent} onChange={onChangeEvent}>
           {Object.keys(liveEvents).map(d => (
             <option key={d} value={d}>
-              {d.capitalize()}
+              {capitalize(d)}
             </option>
           ))}
         </Select>
