@@ -10,6 +10,8 @@ const path = require('path')
 
 const { NODE_ENV = 'development' } = process.env
 
+const icons = [16, 32, 128].map(size => ({ from: `./src/icon/icon${size}.png`, to: `./icon${size}.png` }))
+
 const base = {
   context: __dirname,
   entry: {
@@ -94,6 +96,8 @@ const base = {
     new CopyPlugin({
       patterns: [
         { from: './src/manifest.json', to: './manifest.json' },
+        { from: `./src/icon/record32.png`, to: `./record32.png` },
+        ...icons
       ]
     }),
     new HtmlWebpackPlugin({

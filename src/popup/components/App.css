@@ -5,3 +5,16 @@ body {
 .root {
   width: 450px;
 }
+
+.align-items-center {
+  display: flex;
+  align-items: center;
+}
+
+.p-12 {
+  padding: 12px;
+}
+
+.m-r-8 {
+  margin-right: 18px;
+}

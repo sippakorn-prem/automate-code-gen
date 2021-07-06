@@ -1,11 +1,11 @@
 class RecordingController {
-  constructor (){
+  constructor() {
     this._initialized = false
     this._recording = {}
     this._isPaused = false
   }
 
-  init () {
+  init() {
     chrome.extension.onConnect.addListener(port => {
       port.onMessage.addListener(msg => {
         if (msg.action) this[msg.action]()
@@ -13,42 +13,47 @@ class RecordingController {
     })
   }
 
-  start = () =>{
-    this.cleanUp(()=>{
-      if(!this._initialized) this.injectScript()
+  start = () => {
+    this.cleanUp(() => {
+      if (!this._initialized) this.injectScript()
       chrome.runtime.onMessage.addListener(this.handleMessage)
+      chrome.browserAction.setIcon({ path: 'record32.png' })
     })
   }
 
-  pause = () =>{
+  pause = () => {
     this._isPaused = true
   }
-  
-  reset = () =>{
-    this.cleanUp(()=>{
+
+  reset = () => {
+    this.cleanUp(() => {
       chrome.runtime.onMessage.removeListener(this.handleMessage)
     })
   }
 
-  stop = () =>{
+  stop = () => {
     chrome.runtime.onMessage.removeListener(this.handleMessage)
     chrome.storage.local.set({ recordingEvents: this._recording })
+    chrome.browserAction.setIcon({ path: 'icon32.png' })
   }
 
   cleanUp = callback => {
     this._recording = {}
-    chrome.storage.local.remove('recordingEvents', () => {
-      callback?.()
-    })
+    chrome.storage.local.remove(['recordingEvents', 'route'], callback)
+    chrome.browserAction.setIcon({ path: 'icon32.png' })
   }
 
-  handleMessage = (msg, sender) => {
-    if (this._recording[msg.action]) this._recording[msg.action].push(msg)
-    else this._recording[msg.action] = [msg]
-    chrome.storage.local.set({ recordingEvents: this._recording })
+  handleMessage = (message, sender) => {
+    const msg = message && JSON.parse(message)
+    if (msg) {
+      if (this._recording[msg.action]) this._recording[msg.action].push(msg)
+      else this._recording[msg.action] = [msg]
+      console.log({ _recording: this._recording })
+      chrome.storage.local.set({ recordingEvents: this._recording })
+    }
   }
 
-  handleControlMessage = (msg, sender) =>{
+  handleControlMessage = (msg, sender) => {
     console.log({ handleControlMessage: msg, sender })
   }
 
