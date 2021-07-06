@@ -47,6 +47,7 @@ function EventItem(props) {
     else if (type === 'tab-menu') return generateCodeClickTabMenu(eventAction)
     else if (type === 'breadcrumb') return generateCodeClickBreadcrumb(eventAction)
     else if (type === 'card') return generateCodeClickCard(eventAction)
+    else if (type === 'edit-row') return generateCodeClickEditRow(eventAction)
   }
 
   function generateCodeClickMenu(eventAction) {
@@ -67,8 +68,12 @@ function EventItem(props) {
     return `$.suiteClick({ type: 'breadcrumb', index: ${index} })`
   }
 
-  function generateCodeClickCard(eventAction) {
+  function generateCodeClickCard() {
     return `$.suiteClick({ name: '', type: 'card' })`
+  }
+
+  function generateCodeClickEditRow() {
+    return `$.suiteClick({ name: '', type: 'edit-row' })`
   }
 
   function getMatchDataQa({ dataQa, wrapper, regexName }) {
