@@ -45,6 +45,7 @@ function EventItem(props) {
     const type = eventAction?.action?.type
     if (type === 'menu') return generateCodeClickMenu(eventAction)
     else if (type === 'tab-menu') return generateCodeClickTabMenu(eventAction)
+    else if (type === 'breadcrumb') return generateCodeClickBreadcrumb(eventAction)
   }
 
   function generateCodeClickMenu(eventAction) {
@@ -56,8 +57,13 @@ function EventItem(props) {
 
   function generateCodeClickTabMenu(eventAction) {
     let tabName = getMatchDataQa({ ...eventAction, regexName: 'clickTabMenu' })
-    console.log(tabName)
     return `$.suiteClick({ name: '', type: 'tab', selector: '[data-qa="${tabName}"]' })`
+  }
+
+  function generateCodeClickBreadcrumb(eventAction) {
+    let index = getMatchDataQa({ ...eventAction, regexName: 'clickBreadcrumb' })
+    index = index?.split('breadcrumb-')?.[1] || ''
+    return `$.suiteClick({ type: 'breadcrumb', index: ${index} })`
   }
 
   function getMatchDataQa({ dataQa, wrapper, regexName }) {

@@ -84,5 +84,6 @@ export default class EventRecorder {
     const isMatch = regex => dataQa?.match(regex) || wrapper.some(wr => wr.match(regex))
     if (isMatch(regex.clickMenu)) return 'menu'
     else if (isMatch(regex.clickTabMenu)) return 'tab-menu'
+    else if (isMatch(regex.clickBreadcrumb)) return 'breadcrumb'
   }
 }
